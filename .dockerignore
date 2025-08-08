@@ -1,0 +1,36 @@
+# Ignore Git
+.git
+.gitignore
+
+# Ignore node_modules (will install fresh in Docker)
+**/node_modules
+**/npm-debug.log
+**/yarn.lock
+**/package-lock.json
+
+# Ignore build outputs (will be rebuilt in container)
+dist
+build
+.next
+out
+.cache
+coverage
+*.tsbuildinfo
+
+# Ignore local env files — secrets should come from Docker env vars
+.env
+.env.local
+.env.*.local
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+*.swp
+
+# Logs & temp files
+logs
+*.log
+tmp
+docker-data
