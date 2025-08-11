@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 import amqp from "amqplib";
 
 const PORT = process.env.PORT || 4000;
-const RABBITMQ_URL = process.env.RABBITMQ_URL || "amqp://rabbitmq:5672";
+const RABBITMQ_URL = process.env.RABBITMQ_URL || "amqp://guest:guest@localhost:5672";
 
 async function startServer() {
   const app = express();
