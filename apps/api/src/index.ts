@@ -5,13 +5,13 @@ import http from "http";
 import { Server } from "socket.io";
 import { io as ClientIO } from "socket.io-client"; // <-- client import
 import amqp from "amqplib";
-import {prisma} from "../../../shared/config/db.ts";
+import {connectDB} from "../../../shared/config/db.ts";
+import {User} from "../../../shared/schemas/User.ts";
 import { redis } from "../../../shared/config/redis.ts";
 
 
 const PORT = process.env.PORT || 3000;
-const RABBITMQ_URL =
-  process.env.RABBITMQ_URL || "amqp://guest:guest@localhost:5672";
+const RABBITMQ_URL = process.env.RABBITMQ_URL || "amqp://guest:guest@localhost:5672";
 
 async function startServer() {
   const app = express();
@@ -29,7 +29,7 @@ async function startServer() {
 
   //tests
   app.get("/test-db", async (_req, res) => {
-  const users = await prisma.user.findMany();
+  const users = await connectDB();
   res.json(users);
 });
 
@@ -50,6 +50,12 @@ app.get("/test-redis", async (_req, res) => {
     console.log(`Queue '${queue}' is ready`);
   } catch (err) {
     console.error("RabbitMQ connection failed: ", err);
+  }
+
+  try {
+    connectDB().then(()=>{console.log("Connected to MongoDb - ✅")})
+  } catch (error) {
+    console.error("Mongoo connection failed: ", error);
   }
 
   // Socket.IO server events
