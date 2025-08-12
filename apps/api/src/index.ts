@@ -11,7 +11,7 @@ import { redis } from "../../../shared/config/redis.ts";
 
 
 const PORT = process.env.PORT || 3000;
-const RABBITMQ_URL = process.env.RABBITMQ_URL || "amqp://guest:guest@localhost:5672";
+const RABBITMQ_URL = process.env.RABBITMQ_URL;
 
 async function startServer() {
   const app = express();
@@ -41,7 +41,7 @@ app.get("/test-redis", async (_req, res) => {
 
   // RabbitMQ connection
   try {
-    const connection = await amqp.connect(RABBITMQ_URL);
+    const connection = await amqp.connect(RABBITMQ_URL!);
     const channel = await connection.createChannel();
     console.log("Connected to RabbitMQ - ✅");
 
