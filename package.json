@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch apps/api/src --watch shared --ext ts,json --exec ts-node -r tsconfig-paths/register --project apps/api/tsconfig.json apps/api/src/index.ts"
+    "dev:api": "nodemon --watch apps/api/src --watch shared --ext ts,json --exec ts-node -r tsconfig-paths/register --project apps/api/tsconfig.json apps/api/src/index.ts",
+    "dev:web": "npm run dev --prefix apps/web",
+    "dev": "concurrently \"npm run dev:web\" \"npm run dev:api\""
   },
   "repository": {
     "type": "git",
