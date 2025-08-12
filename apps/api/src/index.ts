@@ -10,8 +10,7 @@ import { redis } from "../../../shared/config/redis.ts";
 
 
 const PORT = process.env.PORT || 3000;
-const RABBITMQ_URL =
-  process.env.RABBITMQ_URL || "amqp://guest:guest@localhost:5672";
+const RABBITMQ_URL = process.env.RABBITMQ_URL || "amqp://guest:guest@localhost:5672";
 
 async function startServer() {
   const app = express();
