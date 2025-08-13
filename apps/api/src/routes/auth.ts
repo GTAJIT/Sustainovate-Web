@@ -34,10 +34,60 @@ router.get('/discord/callback',
       // Generate JWT token
       const token = generateToken(user);
       
-      // Redirect to frontend with token
-      res.redirect(`${FRONTEND_URL}/auth/success?token=${token}`);
+      // Set secure cookie
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+      
+      // Redirect to frontend
+      res.redirect(`${FRONTEND_URL}/auth/success`);
     } catch (error) {
-      console.error('Auth callback error:', error);
+      console.error('Discord auth callback error:', error);
+      res.redirect(`${FRONTEND_URL}/login?error=callback_failed`);
+    }
+  }
+);
+
+/**
+ * GET /auth/github
+ * Initiate GitHub OAuth flow
+ */
+router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+
+/**
+ * GET /auth/github/callback
+ * GitHub OAuth callback
+ */
+router.get('/github/callback', 
+  passport.authenticate('github', { 
+    failureRedirect: `${FRONTEND_URL}/login?error=auth_failed` 
+  }),
+  (req, res) => {
+    try {
+      const user = req.user as IUser;
+      
+      if (!user) {
+        return res.redirect(`${FRONTEND_URL}/login?error=no_user`);
+      }
+
+      // Generate JWT token
+      const token = generateToken(user);
+      
+      // Set secure cookie
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+      
+      // Redirect to frontend
+      res.redirect(`${FRONTEND_URL}/auth/success`);
+    } catch (error) {
+      console.error('GitHub auth callback error:', error);
       res.redirect(`${FRONTEND_URL}/login?error=callback_failed`);
     }
   }

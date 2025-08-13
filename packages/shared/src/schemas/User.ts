@@ -1,11 +1,22 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IUser extends Document {
-  discordId: string;
+  // Discord OAuth fields
+  discordId?: string;
+  
+  // GitHub OAuth fields
+  githubId?: string;
+  githubAccessToken?: string;
+  githubRefreshToken?: string;
+  
+  // Common fields (used by both providers)
   username: string;
-  globalName?: string;
   email?: string;
+  fullname?: string;
   avatar?: string;
+  
+  // Discord specific fields
+  globalName?: string;
   discriminator?: string;
   verified?: boolean;
   locale?: string;
@@ -19,6 +30,7 @@ export interface IUser extends Document {
   // Application specific fields
   role: 'user' | 'admin' | 'moderator';
   isActive: boolean;
+  authProvider: 'discord' | 'github';
   lastLoginAt?: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -26,11 +38,21 @@ export interface IUser extends Document {
 
 const UserSchema = new Schema<IUser>({
   // Discord OAuth fields
-  discordId: { type: String, required: true, unique: true },
+  discordId: { type: String, sparse: true },
+  
+  // GitHub OAuth fields
+  githubId: { type: String, sparse: true },
+  githubAccessToken: { type: String },
+  githubRefreshToken: { type: String },
+  
+  // Common fields
   username: { type: String, required: true },
-  globalName: { type: String },
   email: { type: String },
+  fullname: { type: String },
   avatar: { type: String },
+  
+  // Discord specific fields
+  globalName: { type: String },
   discriminator: { type: String },
   verified: { type: Boolean, default: false },
   locale: { type: String },
@@ -44,14 +66,23 @@ const UserSchema = new Schema<IUser>({
   // Application fields
   role: { type: String, enum: ['user', 'admin', 'moderator'], default: 'user' },
   isActive: { type: Boolean, default: true },
+  authProvider: { type: String, enum: ['discord', 'github'], required: true },
   lastLoginAt: { type: Date },
 }, {
   timestamps: true, // Automatically adds createdAt and updatedAt
 });
 
 // Indexes for better performance
-UserSchema.index({ discordId: 1 });
+UserSchema.index({ discordId: 1 }, { sparse: true });
+UserSchema.index({ githubId: 1 }, { sparse: true });
 UserSchema.index({ email: 1 });
 UserSchema.index({ username: 1 });
+
+// Ensure either discordId or githubId is present
+UserSchema.pre('save', function() {
+  if (!this.discordId && !this.githubId) {
+    throw new Error('User must have either discordId or githubId');
+  }
+});
 
 export const User = mongoose.model<IUser>("User", UserSchema);
