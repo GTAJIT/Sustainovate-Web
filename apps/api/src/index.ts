@@ -1,13 +1,12 @@
-import "../../../shared/config/dotenv-loader.ts";
+import '@sustainovate/shared/config';
 
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
-import { io as ClientIO } from "socket.io-client"; // <-- client import
+import { io as ClientIO } from "socket.io-client";
 import amqp from "amqplib";
-import {connectDB} from "../../../shared/config/db.ts";
-import {User} from "../../../shared/schemas/User.ts";
-import { redis } from "../../../shared/config/redis.ts";
+import { connectDB, redis } from '@sustainovate/shared/config';
+import { User } from '@sustainovate/shared/schemas';
 
 
 const PORT = process.env.PORT || 3000;
