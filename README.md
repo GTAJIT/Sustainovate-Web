@@ -5,6 +5,7 @@
 ---
 
 ## 🚀 Features
+- **Discord Authentication** – Secure OAuth2 login with Discord
 - **Admin Dashboard** – Manage quizzes, polls, events in real time
 - **Live Analytics** – See answers, speed, and accuracy instantly
 - **Scheduled Events** – Plan quizzes for the future
@@ -12,6 +13,8 @@
 - **QR Code Login** – Fast entry for participants
 - **Leaderboard** – Gamified ranking system
 - **Data Export** – CSV/PDF reports for admins
+- **Role-based Access** – User, moderator, and admin permissions
+- **Real-time WebSocket** – Live updates with authentication
 
 ---
 
@@ -29,11 +32,13 @@
 | Tool            | Purpose | Why We Use It |
 | --------------- | ------- | ------------- |
 | **Node.js + Express** | Backend server | Fast and scalable |
+| **Discord OAuth2** | Authentication | Secure user login via Discord |
+| **JWT Tokens** | Session management | Stateless authentication |
 | **Socket.IO**   | Real-time updates | Live quizzes and leaderboards |
-| **PostgreSQL**  | Main database | Reliable and powerful relational DB |
-| **TimescaleDB** | Time-series DB | Speed & accuracy tracking over time |
+| **MongoDB**     | Main database | Flexible document storage |
 | **Redis**       | In-memory cache | Ultra-fast leaderboard updates |
-| **BullMQ**      | Job queue | Background task processing |
+| **RabbitMQ**    | Job queue | Background task processing |
+| **Passport.js** | Auth middleware | OAuth2 strategy handling |
 
 ### **Architecture**
 | Component         | Purpose |
@@ -89,50 +94,69 @@ Sustainovate-Web/                    # 🏠 Root monorepo
    git clone https://github.com/0xmainak/Sustainovate-Web.git
    cd Sustainovate-Web
    
-   # Install dependencies and setup workspace
-   npm install
+   # Automated setup (installs dependencies, creates .env, builds packages)
+   npm run setup
    ```
 
-2. **Environment setup**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your local database credentials
-   ```
+2. **Configure Discord OAuth** (Required for authentication)
+   - Go to [Discord Developer Portal](https://discord.com/developers/applications)
+   - Create a new application
+   - Add redirect URI: `http://localhost:4000/auth/discord/callback`
+   - Copy Client ID and Secret to your `.env` file
+   - See [Discord Auth Guide](./docs/DISCORD_AUTH.md) for detailed setup
 
 3. **Start development environment**
    ```bash
-   # Option 1: Docker (recommended - includes all services)
-   docker-compose up --build
+   # Option 1: Start API server only
+   npm start
    
-   # Option 2: Local development (requires local DB setup)
-   npm run dev
+   # Option 2: Start API in development mode (with hot reload)
+   npm run dev:api
+   
+   # Option 3: Start all services in development
+   npm run dev:all
+   
+   # Option 4: Docker (recommended - includes databases)
+   npm run docker:up
    ```
 
 4. **Access the application**
    - **API Server**: http://localhost:4000
+   - **Discord Auth**: http://localhost:4000/auth/discord
+   - **API Health**: http://localhost:4000/health
    - **RabbitMQ Management**: http://localhost:15672 (guest/guest)
-   - **PostgreSQL**: localhost:5432
 
-### **Development Commands**
+### **Development Commands (All run from root directory)**
 ```bash
-# Run all services in development mode
-npm run dev
+# 🚀 Getting Started
+npm run setup           # Initial project setup (one-time)
+npm start              # Start API server (production build)
+npm run dev:api        # Start API in development mode
+npm run dev:all        # Start all services in development
 
-# Build all packages
-npm run build
+# 🏗️ Building
+npm run build          # Build all packages
+npm run build:api      # Build API only
+npm run build:shared   # Build shared package only
 
-# Run tests
-npm run test
+# 🐳 Docker
+npm run docker:up      # Start all services with Docker
+npm run docker:down    # Stop Docker services
+npm run docker:dev     # Start in development mode with Docker
 
-# Lint and format code
-npm run lint
-npm run format
+# 🔧 Utilities
+npm run test           # Run tests
+npm run lint           # Lint code
+npm run format         # Format code
+npm run type-check     # Type checking
+npm run clean          # Clean all build artifacts
 
-# Type checking
-npm run type-check
-
-# Clean all build artifacts
-npm run clean
+# 🚀 Production (PM2)
+npm run pm2:start      # Start with PM2
+npm run pm2:stop       # Stop PM2 processes
+npm run pm2:restart    # Restart PM2 processes
+npm run pm2:logs       # View PM2 logs
+npm run pm2:status     # Check PM2 status
 ```
 
 ---

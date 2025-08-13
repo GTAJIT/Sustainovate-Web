@@ -1,17 +1,22 @@
 import mongoose from "mongoose";
 import "./dotenv-loader.js";
 
-const mongoUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/sustainovate";
-if (!mongoUrl) {
-  throw new Error("DATABASE_URL missing in .env");
-}
+const mongoUrl = process.env.MONGODB_URI || process.env.DATABASE_URL || "mongodb://localhost:27017/sustainovate";
 
 export async function connectDB() {
   try {
-    await mongoose.connect(mongoUrl); // <-- non-null assertion here
-    console.log("MongoDB connected - ✅");
+    // Only connect if we have a valid MongoDB URL
+    if (mongoUrl.startsWith('mongodb://') || mongoUrl.startsWith('mongodb+srv://')) {
+      await mongoose.connect(mongoUrl);
+      console.log("MongoDB connected - ✅");
+    } else {
+      console.warn("No valid MongoDB URI found, skipping database connection");
+    }
   } catch (error) {
     console.error("MongoDB connection error:", error);
-    process.exit(1);
+    // Don't exit process in development, just log the error
+    if (process.env.NODE_ENV === 'production') {
+      process.exit(1);
+    }
   }
 }
