@@ -22,6 +22,17 @@ coverage/
 .env.local
 .env.*.local
 
+# PM2 files
+.pm2
+ecosystem.config.js
+pids/
+pm2.pid
+
+# Logs
+logs/
+*.log
+*.log.*
+
 # OS files
 .DS_Store
 Thumbs.db

@@ -1,39 +1,69 @@
 {
-  "name": "sustainovate-web",
+  "name": "@sustainovate/root",
   "version": "1.0.0",
-  "description": "**The official Sustainovate platform** for hosting real-time quizzes, polls, and events with live leaderboards and engagement analytics.",
-  "main": "index.js",
+  "private": true,
+  "description": "The official Sustainovate platform for hosting real-time quizzes, polls, and events with live leaderboards and engagement analytics.",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:api": "nodemon --watch apps/api/src --watch shared --ext ts,json --exec ts-node -r tsconfig-paths/register --project apps/api/tsconfig.json apps/api/src/index.ts",
-    "dev:web": "npm run dev --prefix apps/web",
-    "dev": "concurrently \"npm run dev:api\""
+    "build": "npm run build --workspaces --if-present",
+    "dev": "npm run dev --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "type-check": "npm run type-check --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
+    "dev:api": "npm run dev --workspace=apps/api",
+    "dev:shared": "npm run build --workspace=packages/shared && npm run dev --workspace=packages/shared",
+    "build:shared": "npm run build --workspace=packages/shared",
+    "install:all": "npm install",
+    "pm2:start": "pm2 start ecosystem.json",
+    "pm2:stop": "pm2 stop ecosystem.json",
+    "pm2:restart": "pm2 restart ecosystem.json",
+    "pm2:reload": "pm2 reload ecosystem.json",
+    "pm2:delete": "pm2 delete ecosystem.json",
+    "pm2:logs": "pm2 logs",
+    "pm2:monit": "pm2 monit",
+    "pm2:status": "pm2 status",
+    "pm2:flush": "pm2 flush",
+    "pm2:start:prod": "pm2 start ecosystem.json --env production",
+    "pm2:deploy:prod": "pm2 deploy ecosystem.json production",
+    "pm2:deploy:staging": "pm2 deploy ecosystem.json staging"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GTAJIT/Sustainovate-Web.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/GTAJIT/Sustainovate-Web/issues"
-  },
-  "homepage": "https://github.com/GTAJIT/Sustainovate-Web#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.39.1",
-    "concurrently": "^9.2.0",
     "eslint": "^9.33.0",
     "eslint-config-prettier": "^10.1.8",
-    "nodemon": "^3.1.10",
+    "pm2": "^5.3.0",
     "prettier": "^3.6.2",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
   },
-  "dependencies": {
-    "dotenv": "^17.2.1"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0xmainak/Sustainovate-Web.git"
+  },
+  "keywords": [
+    "sustainability",
+    "quiz",
+    "real-time",
+    "leaderboard",
+    "analytics",
+    "typescript",
+    "nodejs"
+  ],
+  "author": "Sustainovate Team",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/0xmainak/Sustainovate-Web/issues"
+  },
+  "homepage": "https://github.com/0xmainak/Sustainovate-Web#readme"
 }

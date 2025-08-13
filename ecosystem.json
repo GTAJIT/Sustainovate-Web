@@ -1,0 +1,94 @@
+{
+  "apps": [
+    {
+      "name": "sustainovate-api",
+      "script": "dist/index.js",
+      "cwd": "./apps/api",
+      "instances": 1,
+      "exec_mode": "cluster",
+      "env": {
+        "NODE_ENV": "development",
+        "PORT": 4000
+      },
+      "env_production": {
+        "NODE_ENV": "production",
+        "PORT": 4000
+      },
+      "log_file": "./logs/api.log",
+      "out_file": "./logs/api-out.log",
+      "error_file": "./logs/api-error.log",
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "merge_logs": true,
+      "max_memory_restart": "1G",
+      "restart_delay": 4000,
+      "watch": false,
+      "ignore_watch": ["node_modules", "logs", "dist"],
+      "watch_options": {
+        "followSymlinks": false
+      }
+    },
+    {
+      "name": "sustainovate-jobs",
+      "script": "dist/worker.js",
+      "cwd": "./services/jobs",
+      "instances": 2,
+      "exec_mode": "cluster",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "env_production": {
+        "NODE_ENV": "production"
+      },
+      "log_file": "./logs/jobs.log",
+      "out_file": "./logs/jobs-out.log",
+      "error_file": "./logs/jobs-error.log",
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "merge_logs": true,
+      "max_memory_restart": "512M",
+      "restart_delay": 4000,
+      "watch": false,
+      "cron_restart": "0 2 * * *"
+    },
+    {
+      "name": "sustainovate-export",
+      "script": "dist/index.js",
+      "cwd": "./services/export",
+      "instances": 1,
+      "exec_mode": "fork",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "env_production": {
+        "NODE_ENV": "production"
+      },
+      "log_file": "./logs/export.log",
+      "out_file": "./logs/export-out.log",
+      "error_file": "./logs/export-error.log",
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "merge_logs": true,
+      "max_memory_restart": "1G",
+      "restart_delay": 4000,
+      "watch": false
+    }
+  ],
+  "deploy": {
+    "production": {
+      "user": "deploy",
+      "host": ["your-server.com"],
+      "ref": "origin/main",
+      "repo": "git@github.com:0xmainak/Sustainovate-Web.git",
+      "path": "/var/www/sustainovate",
+      "pre-deploy-local": "",
+      "post-deploy": "npm install && npm run build && pm2 reload ecosystem.json --env production",
+      "pre-setup": ""
+    },
+    "staging": {
+      "user": "deploy",
+      "host": ["staging-server.com"],
+      "ref": "origin/develop",
+      "repo": "git@github.com:0xmainak/Sustainovate-Web.git",
+      "path": "/var/www/sustainovate-staging",
+      "post-deploy": "npm install && npm run build && pm2 reload ecosystem.json --env staging"
+    }
+  }
+}

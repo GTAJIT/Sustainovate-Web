@@ -1,29 +1,32 @@
 {
-  "name": "api",
+  "name": "@sustainovate/api",
   "version": "1.0.0",
-  "main": "src/index.ts",
+  "description": "Sustainovate API server with real-time capabilities",
   "type": "module",
-
+  "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon --watch src --exec ts-node -r tsconfig-paths/register src/index.ts"
+    "build": "tsc",
+    "dev": "tsx watch --clear-screen=false src/index.ts",
+    "start": "node dist/index.js",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
+    "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@sustainovate/shared": "*",
     "amqplib": "^0.10.8",
-    "dotenv": "^17.2.1",
     "express": "^4.21.2",
-    "module-alias": "^2.2.3",
-    "pg": "^8.16.3",
     "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
-    "ts-node-dev": "^2.0.0"
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
     "@types/express": "^5.0.3",
-    "@types/node": "^24.2.1",
-    "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0",
     "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

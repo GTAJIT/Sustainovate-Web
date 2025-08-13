@@ -1,23 +1,29 @@
 {
-  "name": "export",
+  "name": "@sustainovate/export",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Data export service for generating reports and analytics",
+  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "dev": "tsx watch --clear-screen=false src/index.ts",
+    "start": "node dist/index.js",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
+    "clean": "rm -rf dist"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
+    "@sustainovate/shared": "*",
     "amqplib": "^0.10.8",
-    "dotenv": "^17.2.1",
     "puppeteer": "^24.16.1"
   },
   "devDependencies": {
-    "@types/node": "^24.2.1",
-    "ts-node-dev": "^2.0.0",
+    "@types/amqplib": "^0.10.7",
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0",
     "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

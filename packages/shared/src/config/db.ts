@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import "./dotenv-loader.ts";
+import "./dotenv-loader.js";
 
 const mongoUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/sustainovate";
 if (!mongoUrl) {

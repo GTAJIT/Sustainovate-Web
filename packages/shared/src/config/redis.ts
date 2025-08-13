@@ -1,5 +1,5 @@
 // shared/config/redis.ts
-import "./dotenv-loader.ts";
+import "./dotenv-loader.js";
 import { createClient } from "redis";
 
 if (!process.env.REDIS_URL) {
