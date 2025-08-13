@@ -22,29 +22,24 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "type-check": "npm run type-check --workspaces --if-present",
     "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
-    
     "start": "npm run start:api",
     "start:api": "npm run build:shared && npm run start --workspace=apps/api",
     "start:export": "npm run build:shared && npm run start --workspace=services/export",
     "start:jobs": "npm run build:shared && npm run start --workspace=services/jobs",
     "start:all": "npm run build && npm run pm2:start",
-    
     "dev:api": "npm run build:shared && npm run dev --workspace=apps/api",
     "dev:export": "npm run build:shared && npm run dev --workspace=services/export",
     "dev:jobs": "npm run build:shared && npm run dev --workspace=services/jobs",
     "dev:shared": "npm run build --workspace=packages/shared && npm run dev --workspace=packages/shared",
     "dev:all": "npm run build:shared && concurrently \"npm run dev:api\" \"npm run dev:export\" \"npm run dev:jobs\"",
-    
     "build:api": "npm run build:shared && npm run build --workspace=apps/api",
     "build:export": "npm run build:shared && npm run build --workspace=services/export",
     "build:jobs": "npm run build:shared && npm run build --workspace=services/jobs",
     "build:shared": "npm run build --workspace=packages/shared",
-    
     "install:all": "npm install",
     "docker:up": "docker-compose up --build",
     "docker:down": "docker-compose down",
     "docker:dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build",
-    
     "pm2:start": "pm2 start ecosystem.json",
     "pm2:stop": "pm2 stop ecosystem.json",
     "pm2:restart": "pm2 restart ecosystem.json",
@@ -59,6 +54,7 @@
     "pm2:deploy:staging": "pm2 deploy ecosystem.json staging"
   },
   "devDependencies": {
+    "@types/passport-github2": "^1.2.9",
     "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.39.1",
     "concurrently": "^8.2.2",
@@ -86,5 +82,8 @@
   "bugs": {
     "url": "https://github.com/0xmainak/Sustainovate-Web/issues"
   },
-  "homepage": "https://github.com/0xmainak/Sustainovate-Web#readme"
+  "homepage": "https://github.com/0xmainak/Sustainovate-Web#readme",
+  "dependencies": {
+    "passport-github2": "^0.1.12"
+  }
 }
