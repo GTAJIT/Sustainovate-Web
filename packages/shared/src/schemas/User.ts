@@ -1,6 +1,8 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
+import { string } from "zod/v4";
 
 export interface IUser extends Document {
+  _id: Types.ObjectId;
   discordId: string;
   username: string;
   globalName?: string;
@@ -15,6 +17,7 @@ export interface IUser extends Document {
   flags?: number;
   banner?: string;
   accentColor?: number;
+  password: string;
   
   // Application specific fields
   role: 'user' | 'admin' | 'moderator';
@@ -26,10 +29,10 @@ export interface IUser extends Document {
 
 const UserSchema = new Schema<IUser>({
   // Discord OAuth fields
-  discordId: { type: String, required: true, unique: true },
+  discordId: { type: String, unique: true },
   username: { type: String, required: true },
   globalName: { type: String },
-  email: { type: String },
+  email: { type: String, unique: true },
   avatar: { type: String },
   discriminator: { type: String },
   verified: { type: Boolean, default: false },
@@ -40,6 +43,7 @@ const UserSchema = new Schema<IUser>({
   flags: { type: Number },
   banner: { type: String },
   accentColor: { type: Number },
+  password: {type: String, required: true},
   
   // Application fields
   role: { type: String, enum: ['user', 'admin', 'moderator'], default: 'user' },
@@ -50,7 +54,7 @@ const UserSchema = new Schema<IUser>({
 });
 
 // Indexes for better performance
-UserSchema.index({ discordId: 1 });
+// UserSchema.index({ discordId: 1 });
 UserSchema.index({ email: 1 });
 UserSchema.index({ username: 1 });
 
