@@ -3,6 +3,7 @@ import passport from '../config/passport.js';
 import { generateToken } from '../utils/jwt.js';
 import { authenticateToken, optionalAuth } from '../middleware/auth.js';
 import { User, type IUser } from '@sustainovate/shared/schemas';
+import { createUser } from './register/userCreate.js';
 
 const router = express.Router();
 
@@ -183,6 +184,12 @@ router.get('/check', optionalAuth, (req, res) => {
       role: req.user.role,
     } : null,
   });
+});
+
+router.post('/register', async (req, res) => {
+  const { username, email, password } = req.body;
+  const result = await createUser(username, email, password);
+  res.status(result.success ? 201 : 400).json(result);
 });
 
 export default router;

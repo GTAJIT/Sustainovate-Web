@@ -1,15 +1,13 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
+import { string } from "zod/v4";
 
 export interface IUser extends Document {
-  // Discord OAuth fields
+  _id: Types.ObjectId;
   discordId?: string;
-  
   // GitHub OAuth fields
   githubId?: string;
   githubAccessToken?: string;
   githubRefreshToken?: string;
-  
-  // Common fields (used by both providers)
   username: string;
   email?: string;
   fullname?: string;
@@ -26,6 +24,7 @@ export interface IUser extends Document {
   flags?: number;
   banner?: string;
   accentColor?: number;
+  password: string;
   
   // Application specific fields
   role: 'user' | 'admin' | 'moderator';
@@ -38,6 +37,8 @@ export interface IUser extends Document {
 
 const UserSchema = new Schema<IUser>({
   // Discord OAuth fields
+  globalName: { type: String },
+  email: { type: String, unique: true },
   discordId: { type: String, sparse: true },
   
   // GitHub OAuth fields
@@ -47,7 +48,6 @@ const UserSchema = new Schema<IUser>({
   
   // Common fields
   username: { type: String, required: true },
-  email: { type: String },
   fullname: { type: String },
   avatar: { type: String },
   
@@ -62,6 +62,7 @@ const UserSchema = new Schema<IUser>({
   flags: { type: Number },
   banner: { type: String },
   accentColor: { type: Number },
+  password: {type: String, required: true},
   
   // Application fields
   role: { type: String, enum: ['user', 'admin', 'moderator'], default: 'user' },
