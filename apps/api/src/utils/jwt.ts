@@ -10,9 +10,11 @@ if (!JWT_SECRET) {
 
 export interface JWTPayload {
   userId: string;
-  discordId: string;
+  discordId?: string;
+  githubId?: string;
   username: string;
   role: string;
+  authProvider: 'discord' | 'github';
   iat?: number;
   exp?: number;
 }
@@ -24,8 +26,10 @@ export const generateToken = (user: IUser): string => {
   const payload: JWTPayload = {
     userId: (user._id as any).toString(),
     discordId: user.discordId,
+    githubId: (user as any).githubId,
     username: user.username,
     role: user.role,
+    authProvider: user.authProvider,
   };
 
   return jwt.sign(payload, JWT_SECRET!, { expiresIn: '7d' });

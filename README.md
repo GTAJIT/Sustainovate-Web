@@ -1,6 +1,25 @@
 # 🌱 Sustainovate Live Platform
 
-**The official Sustainovate platform** for hosting real-time quizzes, polls, and events with live leaderboards and engagement analytics.
+**The official Sustainovate platform** for hosting real-time quiz3. **OAuth Setup** (Choose your pref5. **Access the application**
+   - **API Server**: http://localhost:4000
+   - **Discord Auth**: http://localhost:4000/auth/discord
+   - **GitHub Auth**: http://localhost:4000/auth/github
+   - **API Health**: http://localhost:4000/health
+   - **RabbitMQ Management**: http://localhost:15672 (guest/guest) authentication method)
+   
+   **Discord OAuth:**
+   - Go to [Discord Developer Portal](https://discord.com/developers/applications)
+   - Create a new application
+   - Add redirect URI: `http://localhost:4000/auth/discord/callback`
+   - Copy Client ID and Secret to your `.env` file
+   - See [Discord Auth Guide](./docs/DISCORD_AUTH.md) for detailed setup
+
+   **GitHub OAuth:**
+   - Go to [GitHub OAuth Apps](https://github.com/settings/applications/new)
+   - Create a new OAuth app
+   - Add callback URL: `http://localhost:4000/auth/github/callback`
+   - Copy Client ID and Secret to your `.env` file
+   - See [GitHub Auth Guide](./docs/GITHUB_AUTH.md) for detailed setupolls, and events with live leaderboards and engagement analytics.
 
 ---
 
