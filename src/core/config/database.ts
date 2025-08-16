@@ -13,7 +13,7 @@ export async function connectDB() {
         dbName: "sustainovate",
         serverSelectionTimeoutMS: 5000,
       });
-      console.log("MongoDB connected - ✅", mongoUrl);
+      console.log("MongoDB connected - ✅");
       return connection; // ✅ return something
     } else {
       console.warn("No valid MongoDB URI found, skipping database connection");

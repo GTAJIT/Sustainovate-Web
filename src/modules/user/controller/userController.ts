@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose"; // for validating the type
 
 import * as userService from "../service";
+import { AuthRequest } from "../../../core/middlewares/auth";
 
 // GET all users
 export async function getAllUsers(req: Request, res: Response, next: NextFunction) {
@@ -89,4 +90,11 @@ export async function deleteUserById(req: Request, res: Response, next: NextFunc
   } catch (err) {
     next(err);
   }
+}
+export async function getMe(req: AuthRequest, res: Response) {
+  if (!req.user) {
+    return res.status(401).json({ success: false, message: "Unauthorized" });
+  }
+  // req.user should already have the info from authenticateToken
+  res.status(200).json({ success: true, user: req.user });
 }
