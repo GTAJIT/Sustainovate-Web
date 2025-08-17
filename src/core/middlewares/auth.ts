@@ -7,7 +7,7 @@ export interface AuthRequest extends Request {
 }
 
 export function authenticateToken(req: AuthRequest, res: Response, next: NextFunction) {
-  const token = req.cookies?.uid; // make sure cookie-parser middleware is used
+  const token = req.cookies?.uid; // requires cookie-parser
 
   if (!token) {
     req.user = null;
@@ -16,10 +16,17 @@ export function authenticateToken(req: AuthRequest, res: Response, next: NextFun
 
   try {
     const user = getUser(token);
-    req.user = user || null; // attach decoded user or null
+
+    if (!user) {
+      req.user = null;
+      return res.status(403).json({ success: false, message: "Invalid or expired token" });
+    }
+
+    req.user = user; // attach decoded user
     next();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     req.user = null;
-    return res.status(403).json({ success: false, message: "Invalid token", error: err });
+    return res.status(403).json({ success: false, message: "Token verification failed" });
   }
 }
