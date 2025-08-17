@@ -33,6 +33,7 @@ export interface IUser {
   role: "user" | "admin" | "moderator";
   isActive: boolean;
   lastLoginAt?: Date;
+  points: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -89,6 +90,7 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
 
     // App-level
     role: { type: String, enum: ["user", "admin", "moderator"], default: "user" },
+    points: { type: Number, default: 0 },
     isActive: { type: Boolean, default: true },
     lastLoginAt: Date,
   },

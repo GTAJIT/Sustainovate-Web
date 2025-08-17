@@ -30,7 +30,7 @@ export async function deleteById(id: string, password: string) {
   const user = await User.findById(id).select("+password");
   if (!user) return null;
 
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, user.password!);
   if (!isMatch) return null;
 
   await user.deleteOne(); // delete the user if password matches

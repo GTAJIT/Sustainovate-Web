@@ -1,25 +1,32 @@
 /* eslint-disable no-console */
 import mongoose from "mongoose";
 import { config } from "dotenv";
-
 config();
-import User from "../src/modules/user/modle"; // <-- adjust path if needed
 
-async function migrateUsers() {
+import User from "../src/modules/user/modle"; // adjust path if needed
+
+async function migratePoints() {
   try {
     await mongoose.connect(process.env.DATABASE_URL!);
 
+    // Find users missing 'points' or missing 'authProviders'
     const users = await User.find({
-      $or: [{ authProviders: { $exists: false } }, { authProviders: { $size: 0 } }],
+      $or: [
+        { points: { $exists: false } },
+        { authProviders: { $exists: false } },
+        { authProviders: { $size: 0 } },
+      ],
     });
 
     for (const user of users) {
-      user.authProviders = [{ provider: "custom", providerId: user._id.toString() }];
+      if (user.points === undefined) {
+        user.points = 0; // initialize points
+      }
       await user.save();
-      console.log(`✅ Migrated user: ${user.email}`);
+      console.log(`✅ Migrated points for user: ${user.email || user.username}`);
     }
 
-    console.log("🎉 Migration completed successfully.");
+    console.log("🎉 Points migration completed successfully.");
     process.exit(0);
   } catch (err) {
     console.error("❌ Migration failed:", err);
@@ -27,4 +34,4 @@ async function migrateUsers() {
   }
 }
 
-migrateUsers();
+migratePoints();

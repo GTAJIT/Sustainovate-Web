@@ -3,9 +3,41 @@ import mongoose from "mongoose"; // for validating the type
 
 import * as userService from "../service";
 import { AuthRequest } from "../../../core/middlewares/auth";
+import User from "../modle";
 
-// GET all users
+// GET all users data
 export async function getAllUsers(req: Request, res: Response, next: NextFunction) {
+  try {
+    const users = await User.find(
+      {},
+      {
+        _id: 1,
+        username: 1,
+        globalName: 1,
+        avatar: 1,
+        points: 1,
+        email: 1,
+      },
+    ).lean();
+
+    // Map to consistent public fields
+    const publicUsers = users.map((u) => ({
+      id: u._id,
+      name: u.globalName || u.username.split(" ")[0],
+      username: u.username,
+      email: u.email || null,
+      avatar: u.avatar || "",
+      points: u.points ?? 0,
+    }));
+
+    res.json({ data: publicUsers });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// GET all users all data
+export async function getAllUsersData(req: Request, res: Response, next: NextFunction) {
   try {
     let users: unknown = await userService.getAll();
     if (!users) users = "No Users";

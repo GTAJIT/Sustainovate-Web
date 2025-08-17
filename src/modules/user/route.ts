@@ -7,7 +7,8 @@ import * as userController from "./controller/userController";
 const router = Router();
 
 //GET
-router.get("/", authenticateToken, userController.getAllUsers);
+router.get("/", userController.getAllUsers);
+router.get("/data", authenticateToken, userController.getAllUsersData);
 router.get("/me", authenticateToken, userController.getMe);
 router.get("/:identifier", userController.getUser);
 
